@@ -36,10 +36,6 @@ function App() {
   // Animation state
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Initialize Round 1
-  useEffect(() => {
-    startRound(1, null);
-  }, []);
 
   const startRound = (roundNum, themeId) => {
     let initialPool = [];
@@ -65,6 +61,12 @@ function App() {
       }
     }
   };
+
+  // Initialize Round 1
+  useEffect(() => {
+    startRound(1, null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const setNextMatchUpOrAdvance = (current, next) => {
     // We just processed 2 items from current pool.
@@ -139,6 +141,27 @@ function App() {
     }, 400);
   };
 
+  const handleBack = () => {
+    if (isTransitioning || currentRound <= 1) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      const prevRound = currentRound - 1;
+
+      // 이전 라운드로 돌아가면 마지막으로 선택했던 이미지를 제거
+      setFinalImages(prev => prev.slice(0, -1));
+
+      if (prevRound === 1) {
+        setSelectedThemeId(null);
+        startRound(1, null);
+      } else {
+        startRound(prevRound, selectedThemeId);
+      }
+
+      setCurrentRound(prevRound);
+      setIsTransitioning(false);
+    }, 400);
+  };
+
   if (currentRound > 4) {
     return (
       <div className={`fade-in ${isTransitioning ? 'opacity-0' : 'opacity-100'}`} style={{ width: '100%', height: '100%', transition: 'opacity 0.3s' }}>
@@ -187,11 +210,31 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <div style={{ flex: 1 }}></div>
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
+          <button
+            className="round-indicator"
+            style={{
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              background: 'rgba(0, 0, 0, 0.4)',
+              color: 'white'
+            }}
+            onClick={handleBack}
+            disabled={isTransitioning}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            이전
+          </button>
+        </div>
         <div className="theme-grid-title" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', margin: 0, fontSize: '1.5rem' }}>
           {roundLabels[currentRound]}
         </div>
-        <div className="round-indicator">
+        <div className="round-indicator" style={{ position: 'absolute', right: '40px' }}>
           총 {getTotalImagesForRound(currentRound, selectedThemeId)}개의 이미지
         </div>
       </header>
