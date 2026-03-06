@@ -3,9 +3,6 @@ import React from 'react';
 const ThemeGridView = ({ themes, onSelect }) => {
     return (
         <div className="theme-grid-container">
-            <div className="theme-grid-header">
-                <h1 className="theme-grid-title">어떤 분위기를 원하나요?</h1>
-            </div>
             <div className="theme-grid">
                 {themes.map((theme, index) => (
                     <div

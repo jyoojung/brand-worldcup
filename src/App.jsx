@@ -152,9 +152,8 @@ function App() {
     return (
       <div className="app-container" style={{ overflowY: 'auto' }}>
         <header className="app-header">
-          <div className="brand-logo">브랜드 이미지 월드컵</div>
-          <div className="round-indicator">
-            {roundLabels[currentRound]}
+          <div className="theme-grid-title" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', margin: 0, fontSize: '1.5rem' }}>
+            Round 1 / 분위기
           </div>
         </header>
 
@@ -176,14 +175,24 @@ function App() {
   }
 
   // Not loaded yet for MatchUp
-  if (currentMatchUp.length < 2) return null;
+  const getTotalImagesForRound = (roundNum, themeId) => {
+    if (roundNum === 1) return round1_themes.length;
+    const data = theme_data[themeId];
+    if (roundNum === 2) return data.round2_texture.length;
+    if (roundNum === 3) return data.round3_shape.length;
+    if (roundNum === 4) return data.round4_light.length;
+    return 0;
+  };
 
   return (
     <div className="app-container">
       <header className="app-header">
         <div style={{ flex: 1 }}></div>
-        <div className="round-indicator">
+        <div className="theme-grid-title" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', margin: 0, fontSize: '1.5rem' }}>
           {roundLabels[currentRound]}
+        </div>
+        <div className="round-indicator">
+          총 {getTotalImagesForRound(currentRound, selectedThemeId)}개의 이미지
         </div>
       </header>
 

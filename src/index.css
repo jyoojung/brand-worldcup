@@ -49,6 +49,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  padding-bottom: 60px;
+  /* Extend gradient area slightly below text */
 }
 
 .brand-logo {
@@ -71,6 +74,7 @@ body {
   backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
 }
 
 /* MatchUp Component */
@@ -97,9 +101,11 @@ body {
   transition: var(--transition-smooth);
 }
 
+/* Container expansion removed to keep 1:1 ratio
 .matchup-side:hover {
   flex: 1.15;
 }
+*/
 
 .matchup-side:hover::after {
   opacity: 0.4;
@@ -109,11 +115,28 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  filter: brightness(1);
+  /* Initial state */
 }
 
-.matchup-side:hover .matchup-image {
-  transform: scale(1.05);
+/* Cross-Dimming Feature */
+/* When hovering over the container, all images dim... */
+.matchup-container:hover .matchup-image {
+  filter: brightness(0.5);
+}
+
+/* ...EXCEPT the image currently being hovered, which stays bright. It also remains statically sized. */
+.matchup-container .matchup-side:hover .matchup-image {
+  filter: brightness(1);
+}
+
+/* Add Zoom-in specifically on Click (when 'selected' class is appended) */
+.matchup-side.selected .matchup-image {
+  transform: scale(1.1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  filter: brightness(1);
+  /* Ensures selected image doesn't stay dimmed */
 }
 
 .matchup-content {
@@ -152,13 +175,15 @@ body {
   z-index: 20;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
   pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  /* Removed opacity transition */
 }
 
+/* Removed hover hiding for VS Text
 .matchup-container:hover .vs-text {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.9);
 }
+*/
 
 /* Checkmark Animation Overlay */
 .checkmark-overlay {

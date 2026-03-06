@@ -46,9 +46,31 @@ const defaultRoundData = {
   ]
 };
 
-// 3. 테마 매핑 (데모용)
+// '내추럴(natural)' 전용 데이터
+const naturalRoundData = {
+  round2_texture: [
+    { id: 'rough', name: '거칠고 매트한', imageSrc: '/images/natural_rough.jpg' },
+    { id: 'smooth', name: '부드럽고 매끄러운', imageSrc: '/images/natural_smooth.jpg' }
+  ],
+  round3_shape: [
+    { id: 'curved', name: '곡선적/유기적', imageSrc: '/images/natural_curved.jpg' },
+    { id: 'straight', name: '직선적/기하학적', imageSrc: '/images/natural_straight.jpg' },
+    { id: 'symmetrical', name: '대칭적/균형잡힌', imageSrc: '/images/natural_symmetrical.jpg' },
+    { id: 'asymmetrical', name: '비대칭적/자유로운', imageSrc: '/images/natural_asymmetrical.jpg' }
+  ],
+  round4_light: [
+    { id: 'warm', name: '따뜻하고 부드러운', imageSrc: '/images/natural_warm.jpg' },
+    { id: 'cool', name: '차갑고 선명한', imageSrc: '/images/natural_cool.jpg' }
+  ]
+};
+
+// 3. 테마 매핑 (업데이트됨: natural 분기 처리)
 const theme_data = round1_themes.reduce((acc, theme) => {
-  acc[theme.id] = defaultRoundData;
+  if (theme.id === 'natural') {
+    acc[theme.id] = naturalRoundData; // 내추럴을 선택하면 내추럴 전용 데이터 연결
+  } else {
+    acc[theme.id] = defaultRoundData; // 나머지는 기본 데이터 연결
+  }
   return acc;
 }, {});
 
